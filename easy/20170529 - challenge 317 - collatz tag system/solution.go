@@ -10,8 +10,6 @@ var tag = map[string]string {
 	"c": "aaa",
 }
 
-
-
 func cts(s string) {
 	for len(s) > 1 {
 		s = s[2:] + tag[s[:1]]
@@ -20,6 +18,9 @@ func cts(s string) {
 }
 
 func main() {
-	x := "aaaaaaa"
+	x := "aaa"
 	cts(x)
+	fmt.Println("\n")
+	y := "aaaaaaa"
+	cts(y)
 }

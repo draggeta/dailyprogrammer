@@ -18,9 +18,7 @@ func cts(s string) {
 }
 
 func main() {
-	x := "aaa"
-	cts(x)
+	cts("aaa")
 	fmt.Println("\n")
-	y := "aaaaaaa"
-	cts(y)
+	cts("aaaaaaa")
 }

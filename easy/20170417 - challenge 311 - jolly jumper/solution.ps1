@@ -6,26 +6,31 @@ function Test-Jolly {
         [int[]]$Array
     )
     begin {
-        $l = $Array.Length
+        $length = $Array.Length
     }
     process {
-        if ($l -eq 1) {
+        if ($length -eq 1) {
             "$Array JOLLY"
         }
         else {
             [array]$c = @()
-            [array]$t = 1..($l - 1)
-            for ($i = 0; $i -lt $l - 1; $i++) {
+            [array]$test = 1..($length - 1)
+            for ($i = 0; $i -lt $length - 1; $i++) {
                 $c += [math]::Abs($Array[$i] - $Array[$i + 1])
             }
-            if (
-                ($t | Where-Object {$c -notcontains $_}) -eq $null -and
-                ($c | Where-Object {$t -notcontains $_}) -eq $null
-            ) {
-                "$Array JOLLY"
-            }
-            else {
-                "$Array NOT JOLLY"
+            if ($test.Length -eq $c.Length) {
+                $jolly = $true
+                foreach ($number in $test) {
+                    if ($c -notcontains $number) {
+                        $jolly = $false
+                    }
+                }
+                if ($jolly) {
+                    "$Array JOLLY"
+                }
+                elseif (-not $jolly) {
+                    "$Array NOT JOLLY"
+                }
             }
         }
     }

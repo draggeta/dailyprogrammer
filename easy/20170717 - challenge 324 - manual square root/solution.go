@@ -6,6 +6,7 @@ import (
 	"math/big"
 	"strings"
 	"strconv"
+	"errors"
 )
 
 /*
@@ -56,19 +57,21 @@ func sqrEstimate (f float64) float64 {
 	return math.Pow(3.16, digitCount) * adjCorrection[firstDigit]
 }
 
-func sqrNewton (f float64, i float64) string {
+func sqrNewton (f float64, precision float64) (string, error) {
 	var x float64
-	if f > 1 {
+	if f > 100 {
 		x = sqrEstimate(f)
+	} else if f < 0 {
+		return "0", errors.New("sqrNewton: square root of negative number")
 	} else {
 		x = 1
 	}
 	d := (x*x - f) / (2 * x)
-	for math.Abs(d) > math.Pow(10, -i) {
+	for math.Abs(d) > math.Pow(10, -precision) {
 		x = x - d
 		d = (x*x - f) / (2 * x)
 	}
-	return big.NewFloat(x).Text('f', int(i))
+	return big.NewFloat(x).Text('f', int(precision)), nil
 }
 
 func main() {
@@ -79,11 +82,12 @@ func main() {
 	}
 	for _,s := range challenge {
 		v := strings.Split(s, " ")
-		var fv []float64
-		for _,i := range v {
-			j,_ := strconv.ParseFloat(i,64)
-			fv = append(fv,j)
+		precision, _ := strconv.ParseFloat(v[0],64)
+		f, _ := strconv.ParseFloat(v[1], 64)
+		if sqrt, err := sqrNewton(f, precision); err != nil {
+			fmt.Println(err)
+		} else {
+			fmt.Println(sqrt)
 		}
-		fmt.Println(sqrNewton(fv[1],fv[0]))
 	}
 }

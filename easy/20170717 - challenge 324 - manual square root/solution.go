@@ -46,13 +46,9 @@ var adjCorrection = map[float64]float64 {
 	9: 0.95,
 }
 
-func digitsInInt (f float64) float64 {
-	return math.Floor(math.Log10(f)) + 1
-}
-
 func sqrEstimate (f float64) float64 {
-	var digitCount = digitsInInt(f)
-	div10Pow := f / (math.Pow(10, digitCount -1))
+	digitCount := math.Floor(math.Log10(f))
+	div10Pow := f / (math.Pow(10, digitCount))
 	firstDigit := math.Floor(math.Abs(div10Pow))
 	return math.Pow(3.16, digitCount) * adjCorrection[firstDigit]
 }
